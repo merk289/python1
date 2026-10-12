@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}Мои заметки{% endblock %}
+
+{% block content %}
+<h2>Мои заметки</h2>
+
+<form method="POST" action="{{ url_for('add_note') }}">
+    <input type="text" name="title" placeholder="Заголовок" required maxlength="100">
+    <textarea name="content" rows="4" placeholder="Текст заметки..." required></textarea>
+    <button type="submit">Добавить заметку</button>
+</form>
+
+<hr>
+
+{% if notes %}
+    {% for note in notes %}
+        <div class="note">
+            <h3>{{ note.title }}</h3>
+            <p>{{ note.content }}</p>
+            <small>{{ note.created_at.strftime('%d.%m.%Y %H:%M') }}</small>
+            <form method="POST" action="{{ url_for('delete_note', note_id=note.id) }}" style="display:inline; float:right;">
+                <button type="submit" class="btn-danger" onclick="return confirm('Удалить заметку?')">Удалить</button>
+            </form>
+        </div>
+    {% endfor %}
+{% else %}
+    <p>У вас пока нет заметок. Добавьте первую!</p>
+{% endif %}
+{% endblock %}
