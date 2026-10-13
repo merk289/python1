@@ -52,7 +52,6 @@ def register():
         password = request.form.get('password', '')
         password2 = request.form.get('password2', '')
 
-        # валидация
         if not username or not email or not password:
             flash('Заполните все поля', 'error')
             return redirect(url_for('register'))
@@ -65,7 +64,6 @@ def register():
             flash('Пароль должен быть не короче 6 символов', 'error')
             return redirect(url_for('register'))
 
-        # проверка существующих пользователей
         if User.query.filter_by(username=username).first():
             flash('Такое имя пользователя уже занято', 'error')
             return redirect(url_for('register'))
@@ -74,7 +72,6 @@ def register():
             flash('Пользователь с таким email уже зарегистрирован', 'error')
             return redirect(url_for('register'))
 
-        # хеширование пароля
         new_user = User(
             username=username,
             email=email,
@@ -138,7 +135,6 @@ def delete_note(note_id):
 
     note = Note.query.get_or_404(note_id)
 
-    # чтобы нельзя было удалять чужие заметки
     if note.user_id != session['user_id']:
         flash('Нет доступа к этой заметке', 'error')
         return redirect(url_for('index'))
